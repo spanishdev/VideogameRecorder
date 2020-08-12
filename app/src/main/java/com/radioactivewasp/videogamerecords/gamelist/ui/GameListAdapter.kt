@@ -1,24 +1,48 @@
 package com.radioactivewasp.videogamerecords.gamelist.ui
 
-import android.view.View
+import android.content.Context
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.extensions.LayoutContainer
+import com.radioactivewasp.videogamerecords.databinding.ItemListContentBinding
+import com.radioactivewasp.videogamerecords.databinding.ItemListLoadingBinding
 
-class GameListAdapter(private val list: List<GameListItem>) : RecyclerView.Adapter<GameListAdapter.GameViewHolder>() {
+class GameListAdapter : RecyclerView.Adapter<GameAdapterViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameViewHolder {
-        TODO("Not yet implemented")
+    var list: List<GameListItem> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    override fun getItemViewType(position: Int): Int = when (list[position]) {
+        is GameListItem.GameItem -> GAME_TYPE
+        GameListItem.LoadingItem -> LOADING_TYPE
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameAdapterViewHolder {
+        val inflater: LayoutInflater =
+            parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+        return when (viewType) {
+            GAME_TYPE -> {
+                GameItemViewHolder(ItemListContentBinding.inflate(inflater, parent, false))
+            }
+            LOADING_TYPE -> {
+                GameLoadingViewHolder(ItemListLoadingBinding.inflate(inflater, parent, false))
+            }
+            else -> throw IllegalArgumentException("ViewType not recognized")
+        }
     }
 
     override fun getItemCount(): Int = list.size
 
-    override fun onBindViewHolder(holder: GameViewHolder, position: Int) {
-        TODO("Not yet implemented")
+    override fun onBindViewHolder(holder: GameAdapterViewHolder, position: Int) {
+        if (holder is GameItemViewHolder) holder.bindGameItem(list[position] as GameListItem.GameItem)
     }
 
-    inner class GameViewHolder(override val containerView: View) :
-        RecyclerView.ViewHolder(containerView), LayoutContainer {
-
+    companion object {
+        private const val GAME_TYPE = 0
+        private const val LOADING_TYPE = 1
     }
 }
