@@ -31,6 +31,7 @@ android {
 
     buildTypes {
         release {
+            buildConfigField("String", "API_HOST", "https://api-v3.igdb.com.")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
