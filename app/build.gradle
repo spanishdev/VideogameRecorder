@@ -11,6 +11,8 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        buildConfigField("String", "API_HOST", "\"https://api-v3.igdb.com\"")
+
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -31,7 +33,6 @@ android {
 
     buildTypes {
         release {
-            buildConfigField("String", "API_HOST", "https://api-v3.igdb.com.")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
